@@ -1,2 +1,20 @@
 # EmbeddedLearningStuff
-Personal repo to keep track of my embedded journey
+
+Personal embedded systems learning repository.
+
+Focus:
+- C fundamentals
+- register-level GPIO
+- bit manipulation
+- non-blocking timing
+- button input
+- debounce
+- simple drivers
+- preparation for STM32
+
+## Projects
+
+### Arduino
+
+- `two_led_button_modes`  
+  Arduino Uno project using register-level GPIO, two LEDs, debounced button input, and mode switching.
