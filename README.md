@@ -10,7 +10,7 @@ Focus:
 - button input
 - debounce
 - simple drivers
-- preparation for STM32
+- preparation for STM32 then for esp32
 
 ## Projects
 
