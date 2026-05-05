@@ -18,3 +18,6 @@ Focus:
 
 - `two_led_button_modes`  
   Arduino Uno project using register-level GPIO, two LEDs, debounced button input, and mode switching.
+
+# PS
+*ALL README files shamelessly generated via LLM :D*
