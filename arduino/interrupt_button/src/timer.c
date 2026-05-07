@@ -3,7 +3,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-typedef void (*TimerCallback)(void *);
 static TimerCallback timer_callback = 0;
 static void *timer_context = 0;
 
