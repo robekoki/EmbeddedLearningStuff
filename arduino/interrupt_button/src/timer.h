@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
+typedef void (*TimerCallback)(void *);
 void Timer1_init_1ms(void);
-void Timer_trackButton(Button *btn);
-extern volatile uint16_t ms_counter;
+void Timer_registerCallback(TimerCallback callback, void *context);
 
 #ifdef __cplusplus
 }

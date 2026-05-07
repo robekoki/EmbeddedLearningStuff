@@ -3,7 +3,9 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-static Button *tracked_btn;
+typedef void (*TimerCallback)(void *);
+static TimerCallback timer_callback = 0;
+static void *timer_context = 0;
 
 void Timer1_init_1ms(void)
 {
@@ -30,11 +32,14 @@ void Timer1_init_1ms(void)
     TIMSK1 |= (1 << OCIE1A);
 }
 
-void Timer_trackButton (Button* btn) {
-    tracked_btn = btn;
+void Timer_registerCallback(TimerCallback callback, void *context) {
+    timer_callback = callback;
+    timer_context = context;
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-    Button_tick_1ms(tracked_btn);
+    if (timer_callback) {
+        timer_callback(timer_context);
+    }
 }

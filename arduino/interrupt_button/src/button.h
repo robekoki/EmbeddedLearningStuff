@@ -16,7 +16,7 @@ typedef struct {
 
 void Button_init(Button *btn);
 void Button_handleInterrupt(Button *btn);
-void Button_tick_1ms(Button *btn);
+void Button_tick_1ms(void *context);
 uint8_t Button_wasPressed(Button *btn);
 
 #ifdef __cplusplus

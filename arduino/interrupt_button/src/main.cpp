@@ -10,7 +10,7 @@ static Button button = { 0, 0, 0, (1 << PD2) };
 void setup() {
   Led_init(&led1);
   Button_init(&button);
-  Timer_trackButton(&button);
+  Timer_registerCallback(Button_tick_1ms, &button);
   Timer1_init_1ms();
 }
 

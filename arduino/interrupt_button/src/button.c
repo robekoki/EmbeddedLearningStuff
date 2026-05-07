@@ -41,26 +41,27 @@ void Button_handleInterrupt(Button *btn)
     }
 }
 
-void Button_tick_1ms(Button *btn)
+void Button_tick_1ms(void *context)
 {
-    if (!int0_button->debouncing)
+    Button *btn = (Button *)context;
+    if (!btn->debouncing)
     {
         return;
     }
 
-    if (int0_button->debounce_counter > 0)
+    if (btn->debounce_counter > 0)
     {
-        int0_button->debounce_counter--;
+        btn->debounce_counter--;
         return;
     }
 
     // Debounce time has passed. Confirm button is still pressed.
-    if (!(PIND & (int0_button->pin_mask)))
+    if (!(PIND & (btn->pin_mask)))
     {
         int0_button->pressed_event = 1;
     }
 
-    int0_button->debouncing = 0;
+    btn->debouncing = 0;
 
     // Clear pending INT0 flag before re-enabling
     EIFR |= (1 << INTF0);
