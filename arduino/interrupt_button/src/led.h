@@ -10,8 +10,6 @@ extern "C" {
 typedef struct {
   uint8_t mask;
   uint8_t state;
-  unsigned long last_blink_time;
-  unsigned long blink_interval;
 } LED;
 
 

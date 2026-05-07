@@ -4,7 +4,7 @@
 #include "button.h"
 #include "led.h"
 
-static LED led1 = { (1u << 5), 0, 0, 500ul };
+static LED led1 = { (1u << 5), 0 };
 static Button button = { 0, 0, 0, (1 << PD2) };
 
 void setup() {

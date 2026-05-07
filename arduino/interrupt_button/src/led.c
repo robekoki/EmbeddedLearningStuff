@@ -6,7 +6,6 @@ void Led_init(LED *led) {
   DDRB |= led->mask;
   PORTB &= ~led->mask;
   led->state = 0;
-  led->last_blink_time = millis();
 }
 
 void Led_on(LED *led) {
