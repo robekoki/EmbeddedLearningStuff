@@ -1,5 +1,5 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef LED_H
+#define LED_H
 
 #ifdef __cplusplus
 extern "C" {
