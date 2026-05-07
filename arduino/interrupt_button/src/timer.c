@@ -3,7 +3,9 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-void timer1_init_1ms(void)
+static Button *tracked_btn;
+
+void Timer1_init_1ms(void)
 {
     // Stop Timer1 while configuring
     TCCR1A = 0;
@@ -28,7 +30,11 @@ void timer1_init_1ms(void)
     TIMSK1 |= (1 << OCIE1A);
 }
 
+void Timer_trackButton (Button* btn) {
+    tracked_btn = btn;
+}
+
 ISR(TIMER1_COMPA_vect)
 {
-    Button_tick_1ms();
+    Button_tick_1ms(tracked_btn);
 }

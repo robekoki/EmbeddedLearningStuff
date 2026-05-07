@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #ifndef LED_H
 #define LED_H
 
@@ -13,10 +15,10 @@ typedef struct {
 } LED;
 
 
-void led_init(LED *led);
-void led_on(LED *led);
-void led_off(LED *led);
-void led_toggle(LED *led);
+void Led_init(LED *led);
+void Led_on(LED *led);
+void Led_off(LED *led);
+void Led_toggle(LED *led);
 
 #ifdef __cplusplus
 }

@@ -4,20 +4,18 @@
 #include <avr/interrupt.h>
 #include <util/atomic.h>
 
-#define BUTTON_PIN PD2
 #define DEBOUNCE_TIME_MS 25
 
-static volatile uint8_t debouncing = 0;
-static volatile uint8_t debounce_counter = 0;
-static volatile uint8_t pressed_event = 0;
+static Button *int0_button;
 
-void Button_init(void)
+void Button_init(Button *btn)
 {
+    int0_button = btn;
     // PD2 input
-    DDRD &= ~(1 << BUTTON_PIN);
+    DDRD &= ~(btn->pin_mask);
 
     // Enable internal pull-up
-    PORTD |= (1 << BUTTON_PIN);
+    PORTD |= (btn->pin_mask);
 
     // INT0 falling edge:
     // ISC01 = 1, ISC00 = 0
@@ -31,38 +29,38 @@ void Button_init(void)
     EIMSK |= (1 << INT0);
 }
 
-void Button_handleInterrupt(void)
+void Button_handleInterrupt(Button *btn)
 {
-    if (!debouncing)
+    if (!btn->debouncing)
     {
-        debouncing = 1;
-        debounce_counter = DEBOUNCE_TIME_MS;
+        btn->debouncing = 1;
+        btn->debounce_counter = DEBOUNCE_TIME_MS;
 
         // Disable INT0 during debounce
         EIMSK &= ~(1 << INT0);
     }
 }
 
-void Button_tick_1ms(void)
+void Button_tick_1ms(Button *btn)
 {
-    if (!debouncing)
+    if (!int0_button->debouncing)
     {
         return;
     }
 
-    if (debounce_counter > 0)
+    if (int0_button->debounce_counter > 0)
     {
-        debounce_counter--;
+        int0_button->debounce_counter--;
         return;
     }
 
     // Debounce time has passed. Confirm button is still pressed.
-    if (!(PIND & (1 << BUTTON_PIN)))
+    if (!(PIND & (int0_button->pin_mask)))
     {
-        pressed_event = 1;
+        int0_button->pressed_event = 1;
     }
 
-    debouncing = 0;
+    int0_button->debouncing = 0;
 
     // Clear pending INT0 flag before re-enabling
     EIFR |= (1 << INTF0);
@@ -71,14 +69,14 @@ void Button_tick_1ms(void)
     EIMSK |= (1 << INT0);
 }
 
-uint8_t Button_wasPressed(void)
+uint8_t Button_wasPressed(Button *btn)
 {
     uint8_t pressed_event_copy;
 
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {
-        pressed_event_copy = pressed_event;
-        pressed_event = 0;
+        pressed_event_copy = btn->pressed_event;
+        btn->pressed_event = 0;
     }
 
     return pressed_event_copy;
@@ -86,5 +84,5 @@ uint8_t Button_wasPressed(void)
 
 ISR(INT0_vect)
 {
-    Button_handleInterrupt();
+    Button_handleInterrupt(int0_button);
 }
