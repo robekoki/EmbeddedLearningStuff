@@ -2,6 +2,7 @@
 #include "button.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 
 static TimerCallback timer_callback = 0;
 static void *timer_context = 0;
@@ -31,9 +32,13 @@ void Timer1_init_1ms(void)
     TIMSK1 |= (1 << OCIE1A);
 }
 
-void Timer_registerCallback(TimerCallback callback, void *context) {
+void Timer_registerCallback(TimerCallback callback, void *context) 
+{
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) 
+    {
     timer_callback = callback;
     timer_context = context;
+    }
 }
 
 ISR(TIMER1_COMPA_vect)
