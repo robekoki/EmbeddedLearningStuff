@@ -11,6 +11,10 @@ extern "C" {
 void UART_init_9600(void);
 void UART_sendByte(uint8_t byte);
 void UART_sendString(const char *str);
+uint8_t UART_receiveByte(void);
+uint8_t UART_hasNext(void);
+uint8_t UART_getBufferedByte(void);
+uint8_t UART_hasNextBuffered(void);
 
 #ifdef __cplusplus
 }
