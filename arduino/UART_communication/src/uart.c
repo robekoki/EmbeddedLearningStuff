@@ -56,4 +56,4 @@ ISR(USART_RX_vect)
     {
         callback(callback_ctx, receivedByte);
     }
-}static 
+} 
