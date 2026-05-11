@@ -3,9 +3,18 @@
 #include <util/atomic.h>
 #include <stdint.h>
 #include "uart.h"
+#include "ring_buffer.h"
 
-volatile static uint8_t dataByte;
-volatile static uint8_t byteAvailable;
+static UART_Callback callback = 0;
+static void* callback_ctx = 0;
+
+void UART_registerCallback(UART_Callback callBack, void *context) {
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) 
+    {
+    callback = callBack;
+    callback_ctx = context;
+    }
+}
 
 void UART_init_9600() {
     UBRR0H = 0;
@@ -39,16 +48,12 @@ uint8_t UART_hasNext() {
     return (UCSR0A & (1 << RXC0));
 }
 
-uint8_t UART_getBufferedByte() {
-    byteAvailable = 0;
-    return dataByte;
-}
+ISR(USART_RX_vect)
+{
+    uint8_t receivedByte = UDR0;
 
-uint8_t UART_hasNextBuffered() {
-    return byteAvailable == 1;
-}
-
-ISR(USART_RX_vect) {
-    dataByte = UDR0;
-    byteAvailable = 1;
-}
+    if (callback != 0)
+    {
+        callback(callback_ctx, receivedByte);
+    }
+}static 

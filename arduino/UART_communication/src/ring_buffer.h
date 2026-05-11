@@ -17,6 +17,7 @@ typedef struct
     uint8_t data[RING_BUFFER_SIZE];
 } RingBuffer;
 
+
 void RingBuffer_init(RingBuffer *buf);
 
 uint8_t RingBuffer_isEmpty(RingBuffer *buf);
